@@ -18,5 +18,5 @@ and data output generated.
 This code uses as a data input the above mentioned UCI dataset to generate a tidy data set saved as `UCIHARTidyData.csv`. 
 
 
-####3.`UCIHARTidyData.csv`:
-This csv file is the output of the code `run_analysis.R`. It is a tidy data set to be used for further future analysis. 
+####3.`UCIHARTidyData.txt`:
+This txt file is the output of the code `run_analysis.R`. It is a tidy data set to be used for further future analysis. 
