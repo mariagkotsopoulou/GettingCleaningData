@@ -1,5 +1,5 @@
 ---
-"CodeBook"
+CodeBook
 ---
 
 ### Data Set Information:
@@ -47,6 +47,7 @@ The not so intuitive and short names are replaced by more explicit and self expl
 ####5.Create an independent tidy data set with the average of each variable for each activity and each subject. 
 
 At this final step the dataset used up till now is transformed via a two step process. At this step we use the `data.table` package funcionalities. First we melt the dataset so we obtain a long format from the previous wide format. So for each Activity and Subject we have all the variables and all the values of the corresponding to each variable in two columns. 
+
 However, each of these variables contains 3 components, in essence the variable BodyMotionAcceleration or GravitationalAcceleration or GyroscopeVelocity the measurement (or statistic) mean or std (standard deviation) and finally the corresponding triaxial so X,Y or Z. 
 The tstrsplit is used to split into each respective component as the are separated by a dash (-). 
 Then we use the dcast function to obtain the mean of each variable for each activity and subject. 

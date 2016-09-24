@@ -102,7 +102,7 @@ datamelt[, (cols) := lapply(.SD, factor), .SDcols=cols]
 
 ## create tidy data set of the variable average by activity and subject 
 datacast = dcast(datamelt, Activity +Subject  + Measurement + Triaxial  ~ Variable , value.var = "value", fun=mean)
-str(datacast)
+
 #### SAVE TIDY DATA SET TO BE USED FOR LATER ANALYSIS
 
 write.csv(datacast, "UCIHARTidyData.csv")
