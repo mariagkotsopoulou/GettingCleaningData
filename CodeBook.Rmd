@@ -1,0 +1,75 @@
+---
+"CodeBook"
+---
+
+### Data Set Information:
+The dataset used is the Human Activity Recognition Using Smartphones Data Set from 
+the UCI Machine Learning Repository. It was built from the recordings of 30 subjects 
+performing six activities while carrying a waist-mounted smartphone 
+with embedded sensors.
+The above mentioned sensors are the accelerometer and the gyroscope. The signals capetured by
+the sensors are 3-axial linear acceleration and 3-axial angular velocity. The sensor acceleration
+signal was separared to its gravitational and body motion components. 
+Variables created a posteriori from the measurement signals include Jerk signals, signal magnitude and Fast Fourier Transform (FFT). 
+
+### Code `run_analysis.R`:
+
+The objective of this code is to create a tidy data set of each measurement variable, that is the body motion component of the 3-axial acceleration, the gravitational component of the the 3-axial acceleration and the gyroscope 3-axial velocity for each activity performed by each subject. 
+
+The code is structured in 5 steps:
+
+####1.Merges the training and the test sets to create one data set.
+
+First, the data set is downloaded using the file URL and extracted at the working directory. 
+The measurements of the subjects were split into two datasets, denominated training (`train/X_train.txt`) and test data sets (`train/y_train.txt`). Each row of these data sets corresponds to measurements of a subject performing an activity. 
+
+In order to merge the training and test data set we first need to add the variable names (`features.txt`) and then the row ids variables Subject (`subject_train.txt`, `subject_test.txt`) and Activity (`y_train.txt`,`y_test.txt`) for the training and data set respectively. 
+
+####2.Extracts only the measurements on the mean and standard deviation for each measurement
+
+The pattern matching function grepl is used to extract the column names of the variables of interest.
+
+We are only interested in selecting the measurement variables and not the variables created a posteriori i.e. Jerk signals, signal magnitude and Fast Fourier Transform. Specifically, we are only interested in the measurements of the mean and standard deviation of the triaxial i.e. X, Y or Z of the linear acceleration and angular velocity.
+
+####3.Uses descriptive activity names to name the activities in the data set
+
+The file `activity_labels.txt` is loaded which contains a mapping of the activity coding 1,2,3,4,5,6 to its descriptive value of walking, walking_upstairs, walking_downstairs, sitting, standing and laying. 
+
+The `plyr::mapvalues` function is used in conjuncture with the `dplyr::mutate` function to recode the Activity column of the dataset. In addition the `tolower` is used to have the values in lower case letters. 
+
+####4.Appropriately labels the data set with descriptive variable names.
+
+The function gsub is used to recode the variable names of the dataset.
+
+The not so intuitive and short names are replaced by more explicit and self explanatory ones. So, `tBodyAcc` is replaced by `BodyMotionAcceleration`, `tGravityAcc` is replaced by `GravitationalAcceleration` and finally `tBodyGyro` is replaced by `GyroscopeVelocity`.
+
+
+####5.Create an independent tidy data set with the average of each variable for each activity and each subject. 
+
+At this final step the dataset used up till now is transformed via a two step process. At this step we use the `data.table` package funcionalities. First we melt the dataset so we obtain a long format from the previous wide format. So for each Activity and Subject we have all the variables and all the values of the corresponding to each variable in two columns. 
+However, each of these variables contains 3 components, in essence the variable BodyMotionAcceleration or GravitationalAcceleration or GyroscopeVelocity the measurement (or statistic) mean or std (standard deviation) and finally the corresponding triaxial so X,Y or Z. 
+The tstrsplit is used to split into each respective component as the are separated by a dash (-). 
+Then we use the dcast function to obtain the mean of each variable for each activity and subject. 
+
+```{r,eval=FALSE ,echo = TRUE, warning = FALSE, message = FALSE}
+
+head(datacast)
+   Activity Subject Measurement Triaxial BodyMotionAcceleration GravitationalAcceleration GyroscopeVelocity
+1:   laying       1        mean        X             0.22159824                -0.2488818       -0.01655309
+2:   laying       1        mean        Y            -0.04051395                 0.7055498       -0.06448612
+3:   laying       1        mean        Z            -0.11320355                 0.4458177        0.14868944
+4:   laying       1         std        X            -0.92805647                -0.8968300       -0.87354387
+5:   laying       1         std        Y            -0.83682741                -0.9077200       -0.95109044
+6:   laying       1         std        Z            -0.82606140                -0.8523663       -0.90828466
+
+str(datacast)
+Classes 'data.table' and 'data.frame':	1080 obs. of  7 variables:
+ $ Activity                 : Factor w/ 6 levels "laying","sitting",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ Subject                  : Factor w/ 30 levels "1","2","3","4",..: 1 1 1 1 1 1 2 2 2 2 ...
+ $ Measurement              : Factor w/ 2 levels "mean","std": 1 1 1 2 2 2 1 1 1 2 ...
+ $ Triaxial                 : Factor w/ 3 levels "X","Y","Z": 1 2 3 1 2 3 1 2 3 1 ...
+ $ BodyMotionAcceleration   : num  0.2216 -0.0405 -0.1132 -0.9281 -0.8368 ...
+ $ GravitationalAcceleration: num  -0.249 0.706 0.446 -0.897 -0.908 ...
+ $ GyroscopeVelocity        : num  -0.0166 -0.0645 0.1487 -0.8735 -0.9511 ...
+```
+Lastly the dataset `datacast` which is a tidy data set is saved as a csv at the working directory with the name UCIHARTidyData. 
