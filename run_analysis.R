@@ -104,6 +104,5 @@ datamelt[, (cols) := lapply(.SD, factor), .SDcols=cols]
 datacast = dcast(datamelt, Activity +Subject  + Measurement + Triaxial  ~ Variable , value.var = "value", fun=mean)
 
 #### SAVE TIDY DATA SET TO BE USED FOR LATER ANALYSIS
-
-write.csv(datacast, "UCIHARTidyData.csv")
+write.table( datacast, "UCIHARTidyData.txt", row.name=FALSE )
 
