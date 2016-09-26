@@ -64,6 +64,8 @@ rm(subsetdatanames,subsetnamesfeatures, namesfeatures)
 
 # load the activity labels (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING)
 activitylabels <- read.table("UCI HAR Dataset/activity_labels.txt")
+activitylabels$V2 <- gsub("WALKING_UPSTAIRS", "walkup", activitylabels$V2)
+activitylabels$V2 <- gsub("WALKING_DOWNSTAIRS", "walkdown", activitylabels$V2)
 
 # recode the activity column using the activity labels 
 data <- data %>% 

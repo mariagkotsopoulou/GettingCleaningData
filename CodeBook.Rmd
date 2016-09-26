@@ -7,7 +7,7 @@ The dataset used is the Human Activity Recognition Using Smartphones Data Set fr
 the UCI Machine Learning Repository. It was built from the recordings of 30 subjects 
 performing six activities while carrying a waist-mounted smartphone 
 with embedded sensors.
-The above mentioned sensors are the accelerometer and the gyroscope. The signals capetured by
+The above mentioned sensors are the accelerometer and the gyroscope. The signals captured by
 the sensors are 3-axial linear acceleration and 3-axial angular velocity. The sensor acceleration
 signal was separared to its gravitational and body motion components. 
 Variables created a posteriori from the measurement signals include Jerk signals, signal magnitude and Fast Fourier Transform (FFT). 
